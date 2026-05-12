@@ -1,7 +1,7 @@
 CC = gcc
 SRC = src/*.c 
 BIN = rayt
-FLGS = -Iinclude -lm
+FLGS = -Iinclude -lm 
 RPPM = rayt.ppm
 RPNG = rayt.png
 CNVRT = convert
@@ -12,7 +12,7 @@ all:
 run: $(BIN)
 	./$(BIN) > $(RPPM)
 	$(CNVRT) $(RPPM) $(RPNG)
-
+	
 clean:
 	rm -f $(BIN)
 	rm $(RPPM)

@@ -15,42 +15,42 @@ typedef struct
 	float z;
 } vec3;
 
-static vec3 setvec3(float x, float y, float z) 
+static inline vec3 setvec3(float x, float y, float z) 
 {
 	return (vec3){x, y, z}; 
 }
 
-static vec3 addvec3(const vec3 v0, const vec3 v1) 
+static inline vec3 addvec3(const vec3 v0, const vec3 v1) 
 {
 	return setvec3(v0.x + v1.x, v0.y + v1.y, v0.z + v1.z);
 }
 
-static vec3 subvec3(const vec3 v0, const vec3 v1) 
+static inline vec3 subvec3(const vec3 v0, const vec3 v1) 
 {
 	return setvec3(v0.x - v1.x, v0.y - v1.y, v0.z - v1.z);
 }
 
-static vec3 mulvec3(const vec3 v0, const vec3 v1) 
+static inline vec3 mulvec3(const vec3 v0, const vec3 v1) 
 {
 	return setvec3(v0.x * v1.x, v0.y * v1.y, v0.z * v1.z);
 }
 
-static vec3 sclmvec3(const vec3 v, float x) 
+static inline vec3 sclmvec3(const vec3 v, float x) 
 {
 	return setvec3(v.x * x, v.y * x, v.z * x);
 }
 
-static vec3 divvec3(const vec3 v0, const vec3 v1) 
+static inline vec3 divvec3(const vec3 v0, const vec3 v1) 
 {
 	return setvec3(v0.x / v1.x, v0.y / v1.y, v0.z / v1.z);
 }
 
-static float dot(const vec3 v0, const vec3 v1)
+static inline float dot(const vec3 v0, const vec3 v1)
 {
 	return v0.x * v1.x + v0.y * v1.y + v0.z * v1.z;
 }
 
-static vec3 cross(const vec3 v0, const vec3 v1)
+static inline vec3 cross(const vec3 v0, const vec3 v1)
 {
 	return setvec3(
 		v0.y * v1.z - v0.z * v1.y,
@@ -59,23 +59,23 @@ static vec3 cross(const vec3 v0, const vec3 v1)
 	);
 }
 
-static vec3 normvec3(vec3 v)
+static inline vec3 normvec3(vec3 v)
 {
     float len = sqrtf(v.x * v.x + v.y * v.y + v.z * v.z);
     return setvec3(v.x / len, v.y / len, v.z / len);
 }
 
-static vec3 reflect(const vec3 v, const vec3 n)
+static inline vec3 reflect(const vec3 v, const vec3 n)
 {
     return subvec3(v, sclmvec3(n, 2.0f * dot(v, n)));
 }
 
-static float slength(const vec3 v)
+static inline float slength(const vec3 v)
 {
     return v.x * v.x + v.y * v.y + v.z * v.z;
 }
 
-static vec3 refract(const vec3 v, const vec3 n, float eta)
+static inline vec3 refract(const vec3 v, const vec3 n, float eta)
 {
     float ctheta = fmin(dot(setvec3(-v.x, -v.y, -v.z), n), 1.0f);
     
@@ -85,12 +85,12 @@ static vec3 refract(const vec3 v, const vec3 n, float eta)
     return addvec3(rouperp, rouprll);
 }
 
-static float length(vec3 v)
+static inline float length(vec3 v)
 {
 	return sqrtf(dot(v, v));
 }
 
-static vec3 randomVec3(float min, float max) 
+static inline vec3 randomVec3(float min, float max) 
 {
     float range = max - min;
     return setvec3(
@@ -100,7 +100,7 @@ static vec3 randomVec3(float min, float max)
     );
 }
 
-static vec3 randomInNormSphere(void) 
+static inline vec3 randomInNormSphere(void) 
 {
     while (1) 
 	{
@@ -110,12 +110,12 @@ static vec3 randomInNormSphere(void)
     }
 }
 
-static vec3 randomNormVec(void) 
+static inline vec3 randomNormVec(void) 
 {
     return normvec3(randomInNormSphere());
 }
 
-static bool nearZero(vec3 v) 
+static inline bool nearZero(vec3 v) 
 {
     float e = 1e-8f;
     return (fabsf(v.x) < e) && (fabsf(v.y) < e) && (fabsf(v.z) < e);

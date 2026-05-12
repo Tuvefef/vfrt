@@ -1,3 +1,4 @@
+#define ___VF_CALC_EXEC_TIME_SCN
 #include "../include/vfrt/vfrt.h"
 
 #define IMGW 600
@@ -52,7 +53,6 @@ static void randomScene(scene* s)
                     );
 
                     float fuzz = uxorShift32fRange(0.0f, 0.5f);
-
                     addElementInScene(s, setSphere(center, 0.2f, setMetalMaterial(albedo, fuzz)));
                 }
                 else
@@ -73,11 +73,12 @@ int main()
     initRenderImg(IMGW, IMGH);
 
     camera c;
-    initCameraRender(&c, IMGW, IMGH, 20.0f, setvec3(7.0f, 2.0f, 3.0f), setvec3(0.0f, 0.0f, -1.0f), setvec3(0.0f, 1.0f, 0.0f));
+    initCameraRender(&c, IMGW, IMGH, 20.0f, setvec3(13.0f, 2.0f, 3.0f), setvec3(0.0f, 0.0f, 0.0f), setvec3(0.0f, 1.0f, 0.0f));
 
     scene s = {0};
     randomScene(&s);
 
-    renderSceneImg(&c, &s, IMGW, IMGH, SAMPLES, MAX_DEPTH);
+    calcSceneExecTime((sceneImgVoid)renderSceneImg, &c, &s, IMGW, IMGH, SAMPLES, MAX_DEPTH);
+
     return 0;
 }

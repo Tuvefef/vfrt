@@ -1,6 +1,8 @@
 #include "../include/vfrt/vfrt.h"
 #include <stdint.h>
 
+#define printRgbValues(r, g, b) printf("%d %d %d\n", (r), (g), (b))
+
 #define ___VF_RAND
 #ifdef  ___VF_RAND
 
@@ -22,10 +24,10 @@ float uxorShift32f(void)
 
 #endif // ___VF_RAND
 
-void initRenderImg(int imgw, int imgh) 
+void initRenderImg(int imageWidth, int imageHeight) 
 {
     printf("P3\n");
-    printf("%d %d\n", imgw, imgh);
+    printf("%d %d\n", imageWidth, imageHeight);
     printf("255\n");
 }
 

@@ -10,9 +10,11 @@
 #include "camera/camera.h"
 #include "material/material.h"
 
-#define printRgbValues(r, g, b) printf("%d %d %d\n", (r), (g), (b))
+#ifdef ___VF_CALC_EXEC_TIME_SCN
+#include "vftm.h"
+#endif
 
-void initRenderImg(int imgw, int imgh);
+void initRenderImg(int imageWidth, int imageHeight);
 void renderSceneImg(camera* c, scene* s, int imageWidth, int imageHeight, int samples, int maxDepth);
 
 #endif
