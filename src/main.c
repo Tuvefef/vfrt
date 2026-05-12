@@ -1,4 +1,3 @@
-#define ___VF_CALC_EXEC_TIME_SCN
 #include "../include/vfrt/vfrt.h"
 
 #define IMGW 600
@@ -77,8 +76,9 @@ int main()
 
     scene s = {0};
     randomScene(&s);
+    renderSceneWithBvh(&s);
 
-    calcSceneExecTime((sceneImgVoid)renderSceneImg, &c, &s, IMGW, IMGH, SAMPLES, MAX_DEPTH);
+    calcSceneExecTime((void*)renderSceneImg, &c, &s, IMGW, IMGH, SAMPLES, MAX_DEPTH);
 
     return 0;
 }

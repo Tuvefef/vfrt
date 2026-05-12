@@ -1,11 +1,12 @@
 #include "../include/vfrt/scene/scene.h"
+#include <float.h>
 
 static vec3 at(float t, ray* r)
 {
     return addvec3(r->origin, sclmvec3(r->direction, t));
 }
 
-static bool hittRenderSphere(sphere* s, ray* r, float tmin, float tmax, hrecord* h)
+bool hittRenderSphere(sphere* s, ray* r, float tmin, float tmax, hrecord* h)
 {
     vec3 oc = subvec3(s->coord, r->origin);
 
@@ -39,22 +40,36 @@ static bool hittRenderSphere(sphere* s, ray* r, float tmin, float tmax, hrecord*
     return true;
 }
 
+#ifdef VF_INC_BVH
+void renderSceneWithBvh(scene* s)
+{
+    bvhBuild(&s->tree, s->s, s->count);
+    s->bvhb = 1;
+}
+#endif
+
 static bool hittRenderScene(scene* sn, ray* r, float tmin, float tmax, hrecord* h)
 {
+
+#ifdef VF_INC_BVH
+    if (sn->bvhb)
+        return bvhHitt(&sn->tree, sn->s, r, h, tmin, tmax);
+#endif
+
     hrecord ht;
-    bool hittAnything = false;
-    float clc = tmax;
+    bool hitAnything = false;
+    float closest = tmax;
 
     for (int i = 0; i < sn->count; i++)
     {
-        if (hittRenderSphere(&sn->s[i], r, tmin, clc, &ht))
+        if (hittRenderSphere(&sn->s[i], r, tmin, closest, &ht))
         {
-            hittAnything = true;
-            clc = ht.t;
+            hitAnything = true;
+            closest = ht.t;
             *h = ht;
         }
     }
-    return hittAnything;
+    return hitAnything;
 }
 
 ray makeSetRay(vec3 origin, vec3 direction)
@@ -75,14 +90,14 @@ sphere setSphere(vec3 coord, float radius, material mat)
     return s;
 }
 
-vec3 rayColor(ray* r, scene* s, int depth)
+vec3 rayColor(ray* r, scene* s, float depth)
 {
-    if (depth <= 0)
+    if (depth <= 0.0f)
         return setvec3(0.0f, 0.0f, 0.0f);
 
     hrecord h;
 
-    if (hittRenderScene(s, r, 0.001f, 1e9f, &h))
+    if (hittRenderScene(s, r, 0.001f, INFINITYVAL, &h))
     {
         ray  scattered;
         vec3 attenuation;

@@ -1,8 +1,7 @@
 #ifndef _V_F_RAYTRACER_VEC3_H
 #define _V_F_RAYTRACER_VEC3_H
 
-#include <math.h>
-#include <stdatomic.h>
+#include "../vfmt.h"
 #include <stdbool.h>
 #include <stdlib.h>
 
@@ -117,7 +116,7 @@ static inline vec3 randomNormVec(void)
 
 static inline bool nearZero(vec3 v) 
 {
-    float e = 1e-8f;
+    float e = EPSILON;
     return (fabsf(v.x) < e) && (fabsf(v.y) < e) && (fabsf(v.z) < e);
 }
 

@@ -21,4 +21,32 @@ typedef struct
     material* mat;
 } hrecord;
 
+#define MSPHERES 512
+
+#define _VF_MAX_NODES (MSPHERES * 2)
+#define _VF_MAX_INDICES MSPHERES
+
+typedef struct
+{
+    vec3 min;
+    vec3 max;
+} aabb;
+
+typedef struct
+{
+    aabb box;
+    int left;
+    int right;
+    int prims;
+    int primc;
+} bvhnode;
+
+typedef struct 
+{
+    bvhnode n[_VF_MAX_NODES];
+    int indice[_VF_MAX_INDICES];
+    int ncount;
+    int icount;
+} bvh;
+
 #endif

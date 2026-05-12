@@ -33,9 +33,9 @@ void initRenderImg(int imageWidth, int imageHeight)
 
 static void outFinalColor(vec3 color) 
 {
-    int r = (int)(255.999 * sqrtf(color.x));
-    int g = (int)(255.999 * sqrtf(color.y));
-    int b = (int)(255.999 * sqrtf(color.z));
+    int r = (int)(255.999 * linearToSrgb(color.x));
+    int g = (int)(255.999 * linearToSrgb(color.y));
+    int b = (int)(255.999 * linearToSrgb(color.z));
 
     printRgbValues(r, g, b);
 }

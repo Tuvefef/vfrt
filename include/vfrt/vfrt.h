@@ -10,7 +10,7 @@
 #include "camera/camera.h"
 #include "material/material.h"
 
-#ifdef ___VF_CALC_EXEC_TIME_SCN
+#ifdef VF_CALC_EXEC_TIME_SCN
 #include "vftm.h"
 #endif
 
