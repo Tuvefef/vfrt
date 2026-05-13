@@ -14,8 +14,11 @@ typedef struct
 {
     sphere s[MSPHERES];
     int count;
+
+#ifdef VF_INC_BVH
     bvh tree;
     int bvhb;
+#endif
 } scene;
 
 ray makeSetRay(vec3 origin, vec3 direction);

@@ -50,7 +50,6 @@ void renderSceneWithBvh(scene* s)
 
 static bool hittRenderScene(scene* sn, ray* r, float tmin, float tmax, hrecord* h)
 {
-
 #ifdef VF_INC_BVH
     if (sn->bvhb)
         return bvhHitt(&sn->tree, sn->s, r, h, tmin, tmax);

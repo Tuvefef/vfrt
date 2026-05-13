@@ -1,3 +1,4 @@
+#define VF_CALC_EXEC_TIME_SCN
 #include "../include/vfrt/vfrt.h"
 
 #define IMGW 600
@@ -67,15 +68,33 @@ static void randomScene(scene* s)
     addElementInScene(s, setSphere(setvec3(4.0f, 1.0f, 0.0f), 1.0f, setMetalMaterial(setvec3(0.7f, 0.6f, 0.5f), 0.0f)));
 }
 
+static void cubeScene(scene* s)
+{
+    float spacing = 0.45f;
+    for (int x = 0; x < 6; x++)
+    {
+        for (int y = 0; y < 6; y++)
+        {
+            for (int z = 0; z < 6; z++)
+            {
+                vec3 pos = setvec3((x - 3) * spacing, y * spacing, (z - 3) * spacing);
+                vec3 color = setvec3(x / 6.0f, y / 6.0f, z / 6.0f);
+
+                addElementInScene(s, setSphere(pos, 0.18f, setMetalMaterial(color, 0.05f)));
+            }
+        }
+    }
+}
+
 int main() 
 {
     initRenderImg(IMGW, IMGH);
 
     camera c;
-    initCameraRender(&c, IMGW, IMGH, 20.0f, setvec3(13.0f, 2.0f, 3.0f), setvec3(0.0f, 0.0f, 0.0f), setvec3(0.0f, 1.0f, 0.0f));
+    initCameraRender(&c, IMGW, IMGH, 50.0f, setvec3(-2.0f, 2.0f, 1.0f), setvec3(0.0f, 0.0f, -1.0f), setvec3(0.0f, 1.0f, 0.0f));
 
     scene s = {0};
-    randomScene(&s);
+    scene0(&s);
     renderSceneWithBvh(&s);
 
     calcSceneExecTime((void*)renderSceneImg, &c, &s, IMGW, IMGH, SAMPLES, MAX_DEPTH);
