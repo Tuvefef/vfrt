@@ -88,16 +88,27 @@ static void cubeScene(scene* s)
 
 int main() 
 {
-    initRenderImg(IMGW, IMGH);
+    initWindow();
+
+    VFRayTWindow* window = createWindow("vf raytracer", IMGW, IMGH);
+    VFRayTRenderer* renderer = createRenderer(window);
 
     camera c;
-    initCameraRender(&c, IMGW, IMGH, 50.0f, setvec3(-2.0f, 2.0f, 1.0f), setvec3(0.0f, 0.0f, -1.0f), setvec3(0.0f, 1.0f, 0.0f));
+    initCameraRender(&c, IMGW, IMGH, 20.0f, setvec3(13.0f, 2.0f, 3.0f),
+                     setvec3(0.0f, 0.0f, 0.0f), setvec3(0.0f, 1.0f, 0.0f));
 
     scene s = {0};
-    scene0(&s);
+    randomScene(&s);
     renderSceneWithBvh(&s);
 
-    calcSceneExecTime((void*)renderSceneImg, &c, &s, IMGW, IMGH, SAMPLES, MAX_DEPTH);
+    calcSceneLoadTime(renderScenePixels, &c, &s, IMGW, IMGH, SAMPLES, MAX_DEPTH, renderer);
+
+    windowPollEvent();
+
+    destroyRenderer(renderer);
+    destroyWindow(window);
+
+    finishWindow();
 
     return 0;
 }

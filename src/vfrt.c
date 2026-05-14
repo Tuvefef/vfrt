@@ -1,5 +1,4 @@
 #include "../include/vfrt/vfrt.h"
-#include <stdint.h>
 
 #define printRgbValues(r, g, b) printf("%d %d %d\n", (r), (g), (b))
 
@@ -24,23 +23,33 @@ float uxorShift32f(void)
 
 #endif // ___VF_RAND
 
-void initRenderImg(int imageWidth, int imageHeight) 
+void initWindow()
 {
-    printf("P3\n");
-    printf("%d %d\n", imageWidth, imageHeight);
-    printf("255\n");
+    SDL_Init(SDL_INIT_VIDEO);
 }
 
-static void outFinalColor(vec3 color) 
+static void outFinalColor(vec3 color, SDL_Renderer* renderer, int i, int j) 
 {
-    int r = (int)(255.999 * linearToSrgb(color.x));
-    int g = (int)(255.999 * linearToSrgb(color.y));
-    int b = (int)(255.999 * linearToSrgb(color.z));
+    uint8_t r = (uint8_t)(255.999 * linearToSrgb(color.x));
+    uint8_t g = (uint8_t)(255.999 * linearToSrgb(color.y));
+    uint8_t b = (uint8_t)(255.999 * linearToSrgb(color.z));
 
-    printRgbValues(r, g, b);
+    SDL_SetRenderDrawColor(renderer, r, g, b, 255);
+    SDL_RenderDrawPoint(renderer, i, j);
 }
 
-void renderSceneImg(camera* c, scene* s, int imageWidth, int imageHeight, int samples, int maxDepth)
+VFRayTWindow* createWindow(const char* windowName, int imageWidth, int imageHeight)
+{
+    return SDL_CreateWindow(windowName, SDL_WINDOWPOS_CENTERED,
+                SDL_WINDOWPOS_CENTERED, imageWidth, imageHeight, SDL_WINDOW_SHOWN);
+}
+
+VFRayTRenderer* createRenderer(VFRayTWindow* window)
+{
+    return SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+}
+
+void renderScenePixels(camera* c, scene* s, int imageWidth, int imageHeight, int samples, int maxDepth, VFRayTRenderer* renderer)
 {
     for (int j = 0; j < imageHeight; j++)
     {
@@ -57,7 +66,41 @@ void renderSceneImg(camera* c, scene* s, int imageWidth, int imageHeight, int sa
             }
 
             color = sclmvec3(color, 1.0f / samples);
-            outFinalColor(color);
+            outFinalColor(color, renderer, i, j);
         }
     }
+
+    SDL_RenderPresent(renderer);
+}
+
+void windowPollEvent(void)
+{
+    SDL_Event event;
+    bool running = true;
+    while (running)
+    {
+        while (SDL_PollEvent(&event))
+        {
+            if (event.type == SDL_QUIT) 
+                running = false;
+
+            if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_ESCAPE) 
+                running = false;
+        }
+    }
+}
+
+void destroyWindow(VFRayTWindow* window)
+{
+    SDL_DestroyWindow(window);
+}
+
+void destroyRenderer(VFRayTRenderer* renderer)
+{
+    SDL_DestroyRenderer(renderer);
+}
+
+void finishWindow(void)
+{
+    SDL_Quit();
 }

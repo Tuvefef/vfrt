@@ -5,22 +5,16 @@ BIN = rayt
 MACROBVH = -DVF_INC_BVH
 MACROTEXEC = -DVF_CALC_EXEC_TIME_SCN
 
-FLGS = -Iinclude -lm $(MACROBVH)
-RPPM = rayt.ppm
-RPNG = rayt.png
-CNVRT = convert
+FLGS = -Iinclude -lm -lSDL2 $(MACROBVH)
 
 all:
 	$(CC) $(SRC) -o $(BIN) $(FLGS)
 
 run: $(BIN)
-	./$(BIN) > $(RPPM)
-	$(CNVRT) $(RPPM) $(RPNG)
+	./$(BIN)
 	
 
 clean:
 	rm -f $(BIN)
-	rm $(RPPM)
-	rm $(RPNG)
 	
 .PHONY: all run clean debug
